@@ -32,20 +32,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(x => x.Status)
                 .HasColumnName("status")
                 .HasConversion(
-                    x => x switch
-                    {
-                        TodoStatus.Pending => "pending",
-                        TodoStatus.InProgress => "in_progress",
-                        TodoStatus.Done => "done",
-                        _ => "pending"
-                    },
-                    x => x switch
-                    {
-                        "pending" => TodoStatus.Pending,
-                        "in_progress" => TodoStatus.InProgress,
-                        "done" => TodoStatus.Done,
-                        _ => TodoStatus.Pending
-                    })
+                    x => ToDatabaseStatus(x),
+                    x => FromDatabaseStatus(x))
                 .HasMaxLength(20)
                 .IsRequired();
             entity.Property(x => x.CreatedAt).HasColumnName("created_at").IsRequired();
@@ -58,5 +46,27 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.HasIndex(x => new { x.UserRefId, x.CreatedAt });
         });
+    }
+
+    private static string ToDatabaseStatus(TodoStatus status)
+    {
+        return status switch
+        {
+            TodoStatus.Pending => "pending",
+            TodoStatus.InProgress => "in_progress",
+            TodoStatus.Done => "done",
+            _ => "pending"
+        };
+    }
+
+    private static TodoStatus FromDatabaseStatus(string value)
+    {
+        return value switch
+        {
+            "pending" => TodoStatus.Pending,
+            "in_progress" => TodoStatus.InProgress,
+            "done" => TodoStatus.Done,
+            _ => TodoStatus.Pending
+        };
     }
 }
