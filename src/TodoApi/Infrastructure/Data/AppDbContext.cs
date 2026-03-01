@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<TodoItem> Todos => Set<TodoItem>();
+    public DbSet<TodoAttachment> TodoAttachments => Set<TodoAttachment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,6 +48,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(x => new { x.UserRefId, x.CreatedAt });
+        });
+
+        modelBuilder.Entity<TodoAttachment>(entity =>
+        {
+            entity.ToTable("todo_attachments");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.TodoRefId).HasColumnName("todo_ref_id").IsRequired();
+            entity.Property(x => x.Name).HasColumnName("name").HasMaxLength(255).IsRequired();
+            entity.Property(x => x.Size).HasColumnName("size").IsRequired();
+            entity.Property(x => x.Type).HasColumnName("type").HasMaxLength(100).IsRequired();
+            entity.Property(x => x.S3Key).HasColumnName("s3_key").IsRequired();
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at").IsRequired();
+
+            entity.HasOne(x => x.Todo)
+                .WithMany(x => x.Attachments)
+                .HasForeignKey(x => x.TodoRefId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(x => x.TodoRefId);
         });
     }
 

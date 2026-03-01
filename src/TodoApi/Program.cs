@@ -7,6 +7,7 @@ using TodoApi.Infrastructure.Data;
 using TodoApi.Infrastructure.Repositories;
 using TodoApi.Infrastructure.Security;
 using TodoApi.Infrastructure.Sessions;
+using TodoApi.Infrastructure.Storage;
 using TodoApi.Middleware;
 using TodoApi.Services;
 
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<ISessionService, RedisSessionService>();
+builder.Services.AddScoped<IAttachmentStorage, S3AttachmentStorage>();
 builder.Services.AddScoped<DbMigrationRunner>();
 builder.Services.AddScoped<DbSeeder>();
 

@@ -37,9 +37,16 @@ public interface IAuthService
     Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default);
 }
 
+public interface IAttachmentStorage
+{
+    Task<string> UploadAsync(Guid todoId, string fileName, string contentType, byte[] content, CancellationToken cancellationToken = default);
+    Task DeleteAsync(string key, CancellationToken cancellationToken = default);
+    string GetReadUrl(string key);
+}
+
 public interface ITodoService
 {
-    Task<IReadOnlyList<TodoResponse>> ListAsync(string userId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<TodoListResponse>> ListAsync(string userId, CancellationToken cancellationToken = default);
     Task<TodoResponse> CreateAsync(string userId, TodoUpsertRequest request, CancellationToken cancellationToken = default);
     Task<TodoResponse> UpdateAsync(string userId, Guid id, TodoUpsertRequest request, CancellationToken cancellationToken = default);
     Task DeleteAsync(string userId, Guid id, CancellationToken cancellationToken = default);

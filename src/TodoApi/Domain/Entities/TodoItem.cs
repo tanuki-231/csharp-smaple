@@ -13,4 +13,5 @@ public class TodoItem
     public DateTimeOffset UpdatedAt { get; set; }
 
     public User User { get; set; } = null!;
+    public List<TodoAttachment> Attachments { get; set; } = [];
 }

@@ -18,6 +18,20 @@ services:
     ports:
       - "6379:6379"
 
+  localstack:
+    image: localstack/localstack:3.7
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: ap-northeast-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_EC2_METADATA_DISABLED: "true"
+    ports:
+      - "4566:4566"
+    volumes:
+      - "./localstack/init:/etc/localstack/init"
+      - "localstack-data:/var/lib/localstack"
+
   api:
     build:
       context: .
@@ -27,12 +41,24 @@ services:
       ConnectionStrings__PostgreSQL: Host=postgres;Port=5432;Database=tododb;Username=todo_user;Password=todo_pass
       Redis__Connection: redis:6379
       Session__TTLMinutes: 20
-      Cors__AllowedOrigins__0: http://localhost:3000
+      Cors__AllowedOrigins__0: http://localhost:5173
       AWS__Enabled: "false"
+      AWS__S3Bucket: todo-api-attachments
+      AWS__S3ServiceUrl: http://localstack:4566
+      AWS__S3UsePathStyle: "true"
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_REGION: ap-northeast-1
+      AWS_EC2_METADATA_DISABLED: "true"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
+      localstack:
+        condition: service_started
     ports:
       - "8080:8080"
+
+volumes:
+  localstack-data:

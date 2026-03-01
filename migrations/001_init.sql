@@ -17,3 +17,21 @@ CREATE TABLE IF NOT EXISTS todos (
 );
 
 CREATE INDEX IF NOT EXISTS idx_todos_user_created_at ON todos (user_ref_id, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS todo_attachments (
+    id UUID PRIMARY KEY,
+    todo_ref_id UUID NOT NULL REFERENCES todos(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    size BIGINT NOT NULL,
+    type VARCHAR(100) NOT NULL,
+    s3_key TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_todo_attachments_todo_ref_id ON todo_attachments (todo_ref_id);
+
+ALTER TABLE todo_attachments
+    ADD COLUMN IF NOT EXISTS s3_key TEXT;
+
+ALTER TABLE todo_attachments
+    DROP COLUMN IF EXISTS data_url;

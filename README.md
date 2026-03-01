@@ -1,109 +1,116 @@
 # TODO Backend (.NET 8 + PostgreSQL + Redis)
 
-Reactãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰ã‹ã‚‰åˆ©ç”¨ã™ã‚‹TODOç®¡ç†ãƒãƒƒã‚¯ã‚¨ãƒ³ãƒ‰ã§ã™ã€‚ä»¥ä¸‹ã‚’æº€ãŸã—ã¾ã™ã€‚
+Reactƒtƒƒ“ƒgƒGƒ“ƒh‚©‚ç—˜—p‚·‚éTODOŠÇ—ƒoƒbƒNƒGƒ“ƒh‚Å‚·BˆÈ‰º‚ğ–‚½‚µ‚Ü‚·B
 
 - ASP.NET Core Web API
-- PostgreSQLæ°¸ç¶šåŒ–ï¼ˆAurora PostgreSQLäº’æ›ï¼‰
-- Redisã‚»ãƒƒã‚·ãƒ§ãƒ³ç®¡ç†ï¼ˆBearer Token / TTL 20åˆ†ï¼‰
-- Docker / docker-compose ã§å³èµ·å‹•
-- `demo / password` ã‚·ãƒ¼ãƒ‰ãƒ¦ãƒ¼ã‚¶ãƒ¼ã§å³ç–é€šç¢ºèª
+- PostgreSQL‰i‘±‰»iAurora PostgreSQLŒİŠ·j
+- RedisƒZƒbƒVƒ‡ƒ“ŠÇ—iBearer Token / TTL 20•ªj
+- Docker / docker-compose ‚Å‘¦‹N“®
+- `demo / password` ƒV[ƒhƒ†[ƒU[‚Å‘¦‘a’ÊŠm”F
 
-## ã‚¢ãƒ¼ã‚­ãƒ†ã‚¯ãƒãƒ£
+## ƒA[ƒLƒeƒNƒ`ƒƒ
 
-- Controller â†’ Service â†’ Repository / Infrastructure
-- `users`, `todos` ã‚’ PostgreSQL ã§ç®¡ç†
-- ãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸæ™‚ã«ãƒ©ãƒ³ãƒ€ãƒ ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç™ºè¡Œã— Redis ã«ä¿å­˜ï¼ˆTTLã¯20åˆ†ï¼‰
-- èªè¨¼ä»˜ã API ã¯ Redis ä¸Šã® token ã‚’æ¤œè¨¼ã€‚ãªã‘ã‚Œã° `440 session timeout`
-- ä¾‹å¤–å¿œç­”ã¯ã‚°ãƒ­ãƒ¼ãƒãƒ«ãƒŸãƒ‰ãƒ«ã‚¦ã‚§ã‚¢ã§çµ±ä¸€
+- Controller ¨ Service ¨ Repository / Infrastructure
+- `users`, `todos` ‚ğ PostgreSQL ‚ÅŠÇ—
+- ƒƒOƒCƒ“¬Œ÷‚Éƒ‰ƒ“ƒ_ƒ€ƒg[ƒNƒ“‚ğ”­s‚µ Redis ‚É•Û‘¶iTTL‚Í20•ªj
+- ”FØ•t‚« API ‚Í Redis ã‚Ì token ‚ğŒŸØB‚È‚¯‚ê‚Î `440 session timeout`
+- —áŠO‰“š‚ÍƒOƒ[ƒoƒ‹ƒ~ƒhƒ‹ƒEƒFƒA‚Å“ˆê
 
-## ãƒªãƒã‚¸ãƒˆãƒªæ§‹æˆ
+## ƒŠƒ|ƒWƒgƒŠ\¬
 
 ```text
 .
-â”œâ”€â”€ Dockerfile
-â”œâ”€â”€ README.md
-â”œâ”€â”€ TodoApi.sln
-â”œâ”€â”€ docker-compose.yml
-â”œâ”€â”€ migrations
-â”‚   â””â”€â”€ 001_init.sql
-â”œâ”€â”€ src
-â”‚   â””â”€â”€ TodoApi
-â”‚       â”œâ”€â”€ Application
-â”‚       â”‚   â””â”€â”€ Contracts.cs
-â”‚       â”œâ”€â”€ Controllers
-â”‚       â”‚   â”œâ”€â”€ AuthController.cs
-â”‚       â”‚   â””â”€â”€ TodosController.cs
-â”‚       â”œâ”€â”€ Domain
-â”‚       â”‚   â”œâ”€â”€ Entities
-â”‚       â”‚   â”‚   â”œâ”€â”€ TodoItem.cs
-â”‚       â”‚   â”‚   â””â”€â”€ User.cs
-â”‚       â”‚   â”œâ”€â”€ Enums
-â”‚       â”‚   â”‚   â””â”€â”€ TodoStatus.cs
-â”‚       â”‚   â””â”€â”€ Exceptions
-â”‚       â”‚       â””â”€â”€ AppException.cs
-â”‚       â”œâ”€â”€ Infrastructure
-â”‚       â”‚   â”œâ”€â”€ Data
-â”‚       â”‚   â”‚   â”œâ”€â”€ AppDbContext.cs
-â”‚       â”‚   â”‚   â”œâ”€â”€ DbMigrationRunner.cs
-â”‚       â”‚   â”‚   â””â”€â”€ DbSeeder.cs
-â”‚       â”‚   â”œâ”€â”€ Repositories
-â”‚       â”‚   â”‚   â”œâ”€â”€ TodoRepository.cs
-â”‚       â”‚   â”‚   â””â”€â”€ UserRepository.cs
-â”‚       â”‚   â”œâ”€â”€ Security
-â”‚       â”‚   â”‚   â””â”€â”€ PasswordHasherService.cs
-â”‚       â”‚   â””â”€â”€ Sessions
-â”‚       â”‚       â””â”€â”€ RedisSessionService.cs
-â”‚       â”œâ”€â”€ Middleware
-â”‚       â”‚   â”œâ”€â”€ GlobalExceptionMiddleware.cs
-â”‚       â”‚   â””â”€â”€ TokenAuthenticationMiddleware.cs
-â”‚       â”œâ”€â”€ Models
-â”‚       â”‚   â”œâ”€â”€ Requests
-â”‚       â”‚   â”‚   â”œâ”€â”€ LoginRequest.cs
-â”‚       â”‚   â”‚   â””â”€â”€ TodoUpsertRequest.cs
-â”‚       â”‚   â””â”€â”€ Responses
-â”‚       â”‚       â”œâ”€â”€ LoginResponse.cs
-â”‚       â”‚       â””â”€â”€ TodoResponse.cs
-â”‚       â”œâ”€â”€ Services
-â”‚       â”‚   â”œâ”€â”€ AuthService.cs
-â”‚       â”‚   â””â”€â”€ TodoService.cs
-â”‚       â”œâ”€â”€ Program.cs
-â”‚       â”œâ”€â”€ TodoApi.csproj
-â”‚       â””â”€â”€ appsettings.json
-â””â”€â”€ tests
-    â””â”€â”€ TodoApi.Tests
-        â”œâ”€â”€ TodoApi.Tests.csproj
-        â””â”€â”€ TodoServiceTests.cs
+„¥„Ÿ„Ÿ Dockerfile
+„¥„Ÿ„Ÿ README.md
+„¥„Ÿ„Ÿ TodoApi.sln
+„¥„Ÿ„Ÿ docker-compose.yml
+„¥„Ÿ„Ÿ migrations
+„    „¤„Ÿ„Ÿ 001_init.sql
+„¥„Ÿ„Ÿ src
+„    „¤„Ÿ„Ÿ TodoApi
+„        „¥„Ÿ„Ÿ Application
+„        „    „¤„Ÿ„Ÿ Contracts.cs
+„        „¥„Ÿ„Ÿ Controllers
+„        „    „¥„Ÿ„Ÿ AuthController.cs
+„        „    „¤„Ÿ„Ÿ TodosController.cs
+„        „¥„Ÿ„Ÿ Domain
+„        „    „¥„Ÿ„Ÿ Entities
+„        „    „    „¥„Ÿ„Ÿ TodoItem.cs
+„        „    „    „¤„Ÿ„Ÿ User.cs
+„        „    „¥„Ÿ„Ÿ Enums
+„        „    „    „¤„Ÿ„Ÿ TodoStatus.cs
+„        „    „¤„Ÿ„Ÿ Exceptions
+„        „        „¤„Ÿ„Ÿ AppException.cs
+„        „¥„Ÿ„Ÿ Infrastructure
+„        „    „¥„Ÿ„Ÿ Data
+„        „    „    „¥„Ÿ„Ÿ AppDbContext.cs
+„        „    „    „¥„Ÿ„Ÿ DbMigrationRunner.cs
+„        „    „    „¤„Ÿ„Ÿ DbSeeder.cs
+„        „    „¥„Ÿ„Ÿ Repositories
+„        „    „    „¥„Ÿ„Ÿ TodoRepository.cs
+„        „    „    „¤„Ÿ„Ÿ UserRepository.cs
+„        „    „¥„Ÿ„Ÿ Security
+„        „    „    „¤„Ÿ„Ÿ PasswordHasherService.cs
+„        „    „¤„Ÿ„Ÿ Sessions
+„        „        „¤„Ÿ„Ÿ RedisSessionService.cs
+„        „¥„Ÿ„Ÿ Middleware
+„        „    „¥„Ÿ„Ÿ GlobalExceptionMiddleware.cs
+„        „    „¤„Ÿ„Ÿ TokenAuthenticationMiddleware.cs
+„        „¥„Ÿ„Ÿ Models
+„        „    „¥„Ÿ„Ÿ Requests
+„        „    „    „¥„Ÿ„Ÿ LoginRequest.cs
+„        „    „    „¤„Ÿ„Ÿ TodoUpsertRequest.cs
+„        „    „¤„Ÿ„Ÿ Responses
+„        „        „¥„Ÿ„Ÿ LoginResponse.cs
+„        „        „¤„Ÿ„Ÿ TodoResponse.cs
+„        „¥„Ÿ„Ÿ Services
+„        „    „¥„Ÿ„Ÿ AuthService.cs
+„        „    „¤„Ÿ„Ÿ TodoService.cs
+„        „¥„Ÿ„Ÿ Program.cs
+„        „¥„Ÿ„Ÿ TodoApi.csproj
+„        „¤„Ÿ„Ÿ appsettings.json
+„¤„Ÿ„Ÿ tests
+    „¤„Ÿ„Ÿ TodoApi.Tests
+        „¥„Ÿ„Ÿ TodoApi.Tests.csproj
+        „¤„Ÿ„Ÿ TodoServiceTests.cs
 ```
 
-## APIä»•æ§˜ï¼ˆ/apiï¼‰
+## APId—li/apij
 
-- `POST /api/login`ï¼ˆèªè¨¼ï¼‰
-- `DELETE /api/logout`ï¼ˆä»»æ„å®Ÿè£…ï¼‰
+- `POST /api/login`i”FØj
+- `DELETE /api/logout`i”CˆÓÀ‘•j
 - `GET /api/todos`
 - `POST /api/todos`
 - `PUT /api/todos/{id}`
 - `DELETE /api/todos/{id}`
 
-ã‚¨ãƒ©ãƒ¼åˆ†é¡:
+ƒGƒ‰[•ª—Ş:
 
 - auth: 401 / 403
-- session_timeout: 440ï¼ˆæœ¬å®Ÿè£… / Redis TTLåˆ‡ã‚Œï¼‰
-- unexpected: ãã®ä»–ï¼ˆä¾‹: 404 / 500ï¼‰
+- session_timeout: 440i–{À‘• / Redis TTLØ‚êj
+- unexpected: ‚»‚Ì‘¼i—á: 404 / 500j
 
-## èµ·å‹•æ–¹æ³•ï¼ˆDockerï¼‰
+## “Y•tƒtƒ@ƒCƒ‹d—l
+
+- “Y•t‚Í”CˆÓ
+- 1 TODO ‚ ‚½‚èÅ‘å 3 ƒtƒ@ƒCƒ‹
+- 1 ƒtƒ@ƒCƒ‹‚ ‚½‚èÅ‘å 1MB
+- `attachments` ”z—ñ‚Å JSON ‚Æ‚µ‚Ä‘—Mi`multipart/form-data` ‚Íg‚í‚È‚¢j
+
+## ‹N“®•û–@iDockerj
 
 ```bash
 docker compose up --build
 ```
 
-èµ·å‹•å¾Œ:
+‹N“®Œã:
 
 - API: `http://localhost:8080`
 - Swagger: `http://localhost:8080/swagger`
 
-## å‹•ä½œç¢ºèªï¼ˆcurlï¼‰
+## “®ìŠm”Ficurlj
 
-### 1. ãƒ­ã‚°ã‚¤ãƒ³
+### 1. ƒƒOƒCƒ“
 
 ```bash
 curl -s -X POST http://localhost:8080/api/login \
@@ -111,81 +118,100 @@ curl -s -X POST http://localhost:8080/api/login \
   -d '{"userId":"demo","password":"password"}'
 ```
 
-ãƒ¬ã‚¹ãƒãƒ³ã‚¹ä¾‹:
+ƒŒƒXƒ|ƒ“ƒX—á:
 
 ```json
 {"token":"<TOKEN>","userId":"demo"}
 ```
 
-### 2. TODOè¿½åŠ 
+### 2. TODO’Ç‰Á
 
 ```bash
 TOKEN=<TOKEN>
 curl -s -X POST http://localhost:8080/api/todos \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
-  -d '{"title":"first todo","description":"sample","status":"pending"}'
+  -d '{"title":"first todo","description":"sample","status":"pending","attachments":[{"name":"sample.txt","size":12,"type":"text/plain","dataUrl":"data:text/plain;base64,SGVsbG8gV29ybGQh"}]}'
 ```
 
-### 3. TODOä¸€è¦§å–å¾—
+### 3. TODOˆê——æ“¾
 
 ```bash
 curl -s http://localhost:8080/api/todos \
   -H "Authorization: Bearer ${TOKEN}"
 ```
 
-### 4. TODOæ›´æ–°
+ƒŒƒXƒ|ƒ“ƒX—á:
+
+```json
+[
+  {
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "status": "pending",
+    "attachmentCount": 1
+  }
+]
+```
+### 4. TODOXV
 
 ```bash
 TODO_ID=<ID>
 curl -s -X PUT http://localhost:8080/api/todos/${TODO_ID} \
   -H "Authorization: Bearer ${TOKEN}" \
   -H "Content-Type: application/json" \
-  -d "{\"id\":\"${TODO_ID}\",\"title\":\"updated\",\"description\":\"changed\",\"status\":\"in_progress\"}"
+  -d "{\"id\":\"${TODO_ID}\",\"title\":\"updated\",\"description\":\"changed\",\"status\":\"in_progress\",\"attachments\":[{\"id\":\"<ATTACHMENT_ID>\",\"name\":\"sample.txt\",\"size\":12,\"type\":\"text/plain\",\"dataUrl\":\"data:text/plain;base64,SGVsbG8gV29ybGQh\"}]}"
 ```
 
-### 5. TODOå‰Šé™¤
+### 5. TODOíœ
 
 ```bash
 curl -i -X DELETE http://localhost:8080/api/todos/${TODO_ID} \
   -H "Authorization: Bearer ${TOKEN}"
 ```
 
-## ä¸»è¦ç’°å¢ƒå¤‰æ•°
+## å—vŠÂ‹«•Ï”
 
-- `ConnectionStrings__PostgreSQL` : PostgreSQLæ¥ç¶šæ–‡å­—åˆ—
-- `Redis__Connection` : Redisæ¥ç¶šå…ˆ
-- `Session__TTLMinutes` : ã‚»ãƒƒã‚·ãƒ§ãƒ³TTLï¼ˆåˆ†ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ20ï¼‰
-- `Cors__AllowedOrigins__0` : CORSè¨±å¯ã‚ªãƒªã‚¸ãƒ³
-- `AWS__Enabled` : `true` ã®å ´åˆã« SSM/SecretsManager å–å¾—ã‚’æœ‰åŠ¹åŒ–
-- `AWS__Region` : AWSãƒªãƒ¼ã‚¸ãƒ§ãƒ³
-- `AWS__SsmPrefix` : SSMã®ãƒ‘ã‚¹ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ï¼ˆä¾‹ `/todo-api/`ï¼‰
-- `AWS__DbSecretId` : DBæ¥ç¶šæƒ…å ±ã‚’ä¿æŒã™ã‚‹SecretsManagerã®ã‚·ãƒ¼ã‚¯ãƒ¬ãƒƒãƒˆID
-- `AWS__LogGroup` : CloudWatch Logsã®ãƒ­ã‚°ã‚°ãƒ«ãƒ¼ãƒ—
+- `ConnectionStrings__PostgreSQL` : PostgreSQLÚ‘±•¶š—ñ
+- `Redis__Connection` : RedisÚ‘±æ
+- `Session__TTLMinutes` : ƒZƒbƒVƒ‡ƒ“TTLi•ªAƒfƒtƒHƒ‹ƒg20j
+- `Cors__AllowedOrigins__0` : CORS‹–‰ÂƒIƒŠƒWƒ“
+- `AWS__Enabled` : `true` ‚Ìê‡‚É SSM/SecretsManager æ“¾‚ğ—LŒø‰»
+- `AWS__Region` : AWSƒŠ[ƒWƒ‡ƒ“
+- `AWS__SsmPrefix` : SSM‚ÌƒpƒXƒvƒŒƒtƒBƒbƒNƒXi—á `/todo-api/`j
+- `AWS__DbSecretId` : DBÚ‘±î•ñ‚ğ•Û‚·‚éSecretsManager‚ÌƒV[ƒNƒŒƒbƒgID
+- `AWS__LogGroup` : CloudWatch Logs‚ÌƒƒOƒOƒ‹[ƒv
 
 
-## AWSé€£æºï¼ˆECS/Fargateæƒ³å®šï¼‰
+## AWS˜AŒgiECS/Fargate‘z’èj
 
-æœ¬å®Ÿè£…ã§ã¯ `AWS:Enabled=true` ã®å ´åˆã€èµ·å‹•æ™‚ã«ä»¥ä¸‹ã‚’å–å¾—ã—ã¾ã™ã€‚
+–{À‘•‚Å‚Í `AWS:Enabled=true` ‚Ìê‡A‹N“®‚ÉˆÈ‰º‚ğæ“¾‚µ‚Ü‚·B
 
-- **SSM Parameter Store** (`AWS:SsmPrefix`, ä¾‹ `/todo-api/`)
-  - `RedisConnection` â†’ `Redis:Connection`
-  - `SessionTTLMinutes` â†’ `Session:TTLMinutes`ï¼ˆæœªè¨­å®šæ™‚ã¯20ï¼‰
-  - `AllowedOrigins`ï¼ˆã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šï¼‰â†’ `Cors:AllowedOrigins`
-  - `CloudWatchLogGroup` â†’ `AWS:LogGroup`
+- **SSM Parameter Store** (`AWS:SsmPrefix`, —á `/todo-api/`)
+  - `RedisConnection` ¨ `Redis:Connection`
+  - `SessionTTLMinutes` ¨ `Session:TTLMinutes`i–¢İ’è‚Í20j
+  - `AllowedOrigins`iƒJƒ“ƒ}‹æØ‚èj¨ `Cors:AllowedOrigins`
+  - `CloudWatchLogGroup` ¨ `AWS:LogGroup`
 - **Secrets Manager** (`AWS:DbSecretId`)
-  - `connectionString` ã¾ãŸã¯ `host/port/username/password/dbname` å½¢å¼ã®JSONã‚’èª­ã¿å–ã‚Šã€`ConnectionStrings:PostgreSQL` ã‚’ç”Ÿæˆ
+  - `connectionString` ‚Ü‚½‚Í `host/port/username/password/dbname` Œ`®‚ÌJSON‚ğ“Ç‚İæ‚èA`ConnectionStrings:PostgreSQL` ‚ğ¶¬
 
-CloudWatch Logs ã«ã¯ `AWS.Logger.AspNetCore` ã‚’ä½¿ã£ã¦å‡ºåŠ›ã—ã¾ã™ã€‚
+CloudWatch Logs ‚É‚Í `AWS.Logger.AspNetCore` ‚ğg‚Á‚Äo—Í‚µ‚Ü‚·B
 
-## DBãƒã‚¤ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+## DBƒ}ƒCƒOƒŒ[ƒVƒ‡ƒ“
 
-- `migrations/001_init.sql` ã‚’èµ·å‹•æ™‚ã« `DbMigrationRunner` ãŒè‡ªå‹•é©ç”¨
-- ä½•åº¦å®Ÿè¡Œã—ã¦ã‚‚å®‰å…¨ãª `IF NOT EXISTS` ã‚’åˆ©ç”¨
+- `migrations/001_init.sql` ‚ğ‹N“®‚É `DbMigrationRunner` ‚ª©“®“K—p
+- ‰½“xÀs‚µ‚Ä‚àˆÀ‘S‚È `IF NOT EXISTS` ‚ğ—˜—p
 
-## è£œè¶³
+## •â‘«
 
-- ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ `PasswordHasher<TUser>` ã«ã‚ˆã‚‹ãƒãƒƒã‚·ãƒ¥ã§ä¿å­˜ï¼ˆå¹³æ–‡ç¦æ­¢ï¼‰
-- Nullable reference types æœ‰åŠ¹
-- async/await ãƒ™ãƒ¼ã‚¹ã§éåŒæœŸå‡¦ç†
-- DTO ã¨ Entity ã‚’åˆ†é›¢
+- ƒpƒXƒ[ƒh‚Í `PasswordHasher<TUser>` ‚É‚æ‚éƒnƒbƒVƒ…‚Å•Û‘¶i•½•¶‹Ö~j
+- Nullable reference types —LŒø
+- async/await ƒx[ƒX‚Å”ñ“¯Šúˆ—
+- DTO ‚Æ Entity ‚ğ•ª—£
+
+
+
+
+
+

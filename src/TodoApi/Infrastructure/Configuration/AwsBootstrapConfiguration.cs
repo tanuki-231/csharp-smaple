@@ -79,6 +79,10 @@ public static class AwsBootstrapConfiguration
                 {
                     settings["AWS:LogGroup"] = parameter.Value;
                 }
+                else if (string.Equals(key, "S3Bucket", StringComparison.OrdinalIgnoreCase))
+                {
+                    settings["AWS:S3Bucket"] = parameter.Value;
+                }
             }
 
             nextToken = response.NextToken;
