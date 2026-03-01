@@ -15,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             entity.ToTable("users");
             entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).HasColumnName("id");
             entity.Property(x => x.UserId).HasColumnName("user_id").HasMaxLength(100).IsRequired();
             entity.Property(x => x.PasswordHash).HasColumnName("password_hash").HasMaxLength(500).IsRequired();
             entity.Property(x => x.CreatedAt).HasColumnName("created_at").IsRequired();
@@ -26,6 +27,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         {
             entity.ToTable("todos");
             entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).HasColumnName("id");
             entity.Property(x => x.UserRefId).HasColumnName("user_ref_id").IsRequired();
             entity.Property(x => x.Title).HasColumnName("title").HasMaxLength(200).IsRequired();
             entity.Property(x => x.Description).HasColumnName("description").HasMaxLength(2000).IsRequired();
